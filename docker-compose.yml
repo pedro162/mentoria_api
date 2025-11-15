@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context:  .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    container_name: mentoria_web
+    user: "appuser"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - mentoria_network
+
+  db:
+    image: postgres:15
+    container_name: mentoria_db
+    environment:
+      POSTGRES_DB: mentoria_api
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mentoria_network
+volumes:
+  postgres_data:
+
+networks:
+  mentoria_network:
+    driver: bridge
