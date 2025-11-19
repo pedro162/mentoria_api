@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     'drf_spectacular',
     "corsheaders",
+    'django_filters',
     'api',
 ]
 
@@ -131,6 +132,23 @@ STATICFILES_DIRS = [ BASE_DIR / "static" ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.DjangoModelPermissions',
+    ],
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':20,
+    'DEFAULT_VERSIONING_CLASS':'rest_framework.versioning.QueryParameterVersioning',
+    'DEFAULT_THROTTLE_CLASSES':[
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES':{
+        'anon':'20/day',
+        'user':'50/minute',
+    },
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -139,3 +157,15 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Documentação oficial da API",
     "VERSION": "1.0.0",
 }
+
+FILTERS_FACTORY = 'django_filters.rest_framework.filterset_factory'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    
+]
